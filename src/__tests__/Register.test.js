@@ -9,6 +9,7 @@ import { config } from "../App";
 import Register from "../components/Register";
 import MockAdapter from "axios-mock-adapter";
 
+
 const mock = new MockAdapter(axios);
 
 mock
@@ -161,6 +162,7 @@ describe("Register Page", () => {
     userEvent.type(passwordInput, req.password);
     userEvent.type(confirmPassword, req.password);
 
+
     return { usernameInput, passwordInput, confirmPassword };
   };
 
@@ -216,6 +218,7 @@ describe("Register Page", () => {
   });
 
   it("should show success alert if request succeeds", async () => {
+
     const request = {
       username: "crio.do",
       password: "learnbydoing",
