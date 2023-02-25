@@ -20,6 +20,11 @@
     color: #00a278 !important;
 }
 
+
+.button {
+    color: #00a278
+}
+
 @media screen and (min-width: 768px) {
     .username-text {
         display: block;

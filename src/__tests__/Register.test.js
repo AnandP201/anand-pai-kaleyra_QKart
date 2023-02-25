@@ -9,10 +9,6 @@ import { config } from "../App";
 import Register from "../components/Register";
 import MockAdapter from "axios-mock-adapter";
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 18e1a7584878a339de60b412e34dfe28a89b31f9
 const mock = new MockAdapter(axios);
 
 mock
@@ -165,10 +161,6 @@ describe("Register Page", () => {
     userEvent.type(passwordInput, req.password);
     userEvent.type(confirmPassword, req.password);
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 18e1a7584878a339de60b412e34dfe28a89b31f9
     return { usernameInput, passwordInput, confirmPassword };
   };
 
@@ -224,10 +216,6 @@ describe("Register Page", () => {
   });
 
   it("should show success alert if request succeeds", async () => {
-<<<<<<< HEAD
-
-=======
->>>>>>> 18e1a7584878a339de60b412e34dfe28a89b31f9
     const request = {
       username: "crio.do",
       password: "learnbydoing",
@@ -259,26 +247,4 @@ describe("Register Page", () => {
     expect(alert).toHaveTextContent(/Username is already taken/i);
   });
 
-<<<<<<< HEAD
-=======
-  it("should redirect to login after success", async () => {
-    const request = {
-      username: "crio.do",
-      password: "learnbydoing",
-    };
-
-    performFormInput(request);
-
-    expect(history.location.pathname).toBe("/login");
-  });
-
-  it("'back to explore' button on Header should route to products", async () => {
-    const exploreButton = screen.getByRole("button", {
-      name: /back to explore/i,
-    });
-    userEvent.click(exploreButton);
-
-    expect(history.location.pathname).toBe("/");
-  });
->>>>>>> 18e1a7584878a339de60b412e34dfe28a89b31f9
 });
