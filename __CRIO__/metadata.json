@@ -1,5 +1,9 @@
 {
+<<<<<<< HEAD
     "module_id": "ME_QKART_FRONTEND_V2_MODULE_REGISTER",
+=======
+    "module_id": "ME_QKART_FRONTEND_V2_MODULE_LOGIN",
+>>>>>>> 18e1a7584878a339de60b412e34dfe28a89b31f9
     "me_id": "ME_QKART_FRONTEND_V2"
 }
   
