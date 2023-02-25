@@ -24,6 +24,8 @@ const Register = () => {
   }
 
 
+
+
   // TODO: CRIO_TASK_MODULE_REGISTER - Implement the register function
   /**
    * Definition for register handler
@@ -150,6 +152,7 @@ const Register = () => {
             placeholder="Enter Username"
             fullWidth
           />
+
           <TextField
             id="password"
             variant="outlined"
