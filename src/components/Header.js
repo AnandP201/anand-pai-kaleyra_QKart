@@ -1,11 +1,22 @@
-
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import InputAdornment from "@mui/material/InputAdornment";
+import Search from '@mui/icons-material/Search';
 import { Avatar, Button, Stack } from "@mui/material";
 import Box from "@mui/material/Box";
+import { makeStyles } from "@mui/styles";
 import React, { useEffect, useState } from "react";
-
 import { useHistory } from "react-router-dom";
 import "./Header.css";
+
+
+const useStyles = makeStyles(theme => ({
+
+  icon: {
+    color: "#00a278"
+  }
+}))
+
 
 const Header = ({ children, hasHiddenAuthButtons }) => {
 
@@ -13,7 +24,7 @@ const Header = ({ children, hasHiddenAuthButtons }) => {
 
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [name, setName] = useState(null)
-
+  const style = useStyles()
 
   useEffect(() => {
 
@@ -32,7 +43,24 @@ const Header = ({ children, hasHiddenAuthButtons }) => {
       <Box className="header-title">
         <img src="logo_light.svg" alt="QKart-icon"></img>
       </Box>
-
+      {
+        children && <Box className="search-desktop">
+          <OutlinedInput
+            id="outlined-adornment-search"
+            className="search"
+            onChange={(ev) => {
+              children.callApi(ev, 500)
+            }}
+            placeholder="Search for items/categories"
+            size="small"
+            endAdornment={
+              <InputAdornment position="end">
+                <Search className={style.icon} />
+              </InputAdornment>
+            }
+          />
+        </Box>
+      }
       {isLoggedIn &&
         <Stack direction="row" spacing={2}>
           <Avatar alt={name} src="avatar.png" />

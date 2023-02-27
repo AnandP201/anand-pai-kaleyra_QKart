@@ -7,7 +7,7 @@ const jwt = require("jsonwebtoken");
 const config = require("../config.json");
 
 router.post("/register", (req, res) => {
-  console.log(`GET request to "/auth/register" received for user`);
+  console.log(`GET request to "/auth/register" received for user}`);
 
   users.findOne({ username: req.body.username }, (err, user) => {
     if (err) {
@@ -19,8 +19,6 @@ router.post("/register", (req, res) => {
         message: "Username already exists",
       });
     }
-
-
     // if (req.body.username.length < 6 || req.body.username.length > 32) {
     //     return res.status(400).json({
     //         success: false,
@@ -42,7 +40,6 @@ router.post("/register", (req, res) => {
       cart: [],
       addresses: [],
     });
-
 
     console.log(`Registered user: ${req.body.username}`);
 

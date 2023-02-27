@@ -58,14 +58,17 @@
     height: 20rem;
     padding-right: 8rem;
   }
+
   .hero-heading {
     position: static;
     font-size: 3rem;
     width: 50%;
   }
+
   .search-mobile {
     display: none !important;
   }
+
   .search-desktop {
     display: block !important;
   }
