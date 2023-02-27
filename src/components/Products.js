@@ -38,7 +38,7 @@ const Products = () => {
 
   const { enqueueSnackbar } = useSnackbar()
 
-
+  console.log(this)
   useEffect(() => {
 
     performAPICall().then((res) => {
@@ -47,7 +47,7 @@ const Products = () => {
         setIsLoading(false)
       }
     })
-
+    // eslint-disable-next-line
   }, [])
 
   // TODO: CRIO_TASK_MODULE_PRODUCTS - Fetch products data and store it

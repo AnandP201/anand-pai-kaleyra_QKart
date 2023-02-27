@@ -1,8 +1,8 @@
-import { Button, CircularProgress, Stack, TextField } from "@mui/material";
+import { Button, Stack, TextField } from "@mui/material";
 import { Box } from "@mui/system";
 import axios from "axios";
 import { useSnackbar } from "notistack";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useHistory, Link } from "react-router-dom";
 import { config } from "../App";
 import Footer from "./Footer";
@@ -118,9 +118,6 @@ const Login = () => {
    * -    `balance` field in localStorage can be used to store the balance amount in the user's wallet
    */
   const persistLogin = (token, username, balance) => {
-    const val = {
-      token: token, username: username, balance: balance
-    }
 
     localStorage.setItem("username", username)
     localStorage.setItem('token', token)
