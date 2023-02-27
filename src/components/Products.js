@@ -12,6 +12,7 @@ import axios from "axios";
 import { useSnackbar } from "notistack";
 import React, { useEffect, useState } from "react";
 import { config } from "../App";
+import Cart, { generateCartItemsFrom } from "./Cart";
 import Footer from "./Footer";
 import Header from "./Header";
 import ProductCard from "./ProductCard"
@@ -32,14 +33,13 @@ import "./Products.css";
 
 const Products = () => {
 
-
   const [products, setProducts] = useState([])
+  const [cart, setCart] = useState([])
   const [isLoading, setIsLoading] = useState(true)
-
   const { enqueueSnackbar } = useSnackbar()
 
-  console.log(this)
   useEffect(() => {
+
 
     performAPICall().then((res) => {
       if (res && res.status === 200) {
@@ -47,8 +47,15 @@ const Products = () => {
         setIsLoading(false)
       }
     })
+
+    const token = localStorage.getItem('token')
+    fetchCart(token).then((data) => {
+      setCart(data)
+    })
+
     // eslint-disable-next-line
   }, [])
+
 
   // TODO: CRIO_TASK_MODULE_PRODUCTS - Fetch products data and store it
   /**
@@ -128,6 +135,146 @@ const Products = () => {
     })
   };
 
+  const fetchCart = async (token) => {
+    if (!token) return;
+
+    try {
+      // TODO: CRIO_TASK_MODULE_CART - Pass Bearer token inside "Authorization" header to get data from "GET /cart" API and return the response data
+      const response = await axios.get(`${config.endpoint}/cart`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
+
+      if (response.status === 200) {
+        return response.data
+      }
+
+
+
+
+
+    } catch (e) {
+      if (e.response && e.response.status === 400) {
+        enqueueSnackbar(e.response.data.message, { variant: "error" });
+      } else {
+        enqueueSnackbar(
+          "Could not fetch cart details. Check that the backend is running, reachable and returns valid JSON.",
+          {
+            variant: "error",
+          }
+        );
+      }
+      return null;
+    }
+  };
+
+
+  // TODO: CRIO_TASK_MODULE_CART - Return if a product already exists in the cart
+  /**
+   * Return if a product already is present in the cart
+   *
+   * @param { Array.<{ productId: String, quantity: Number }> } items
+   *    Array of objects with productId and quantity of products in cart
+   * @param { String } productId
+   *    Id of a product to be checked
+   *
+   * @returns { Boolean }
+   *    Whether a product of given "productId" exists in the "items" array
+   *
+   */
+  const isItemInCart = (items, productId) => {
+
+    if (cart.find(item => item.productId === productId)) return true
+    return false
+
+  };
+
+  /**
+   * Perform the API call to add or update items in the user's cart and update local cart data to display the latest cart
+   *
+   * @param {string} token
+   *    Authentication token returned on login
+   * @param { Array.<{ productId: String, quantity: Number }> } items
+   *    Array of objects with productId and quantity of products in cart
+   * @param { Array.<Product> } products
+   *    Array of objects with complete data on all available products
+   * @param {string} productId
+   *    ID of the product that is to be added or updated in cart
+   * @param {number} qty
+   *    How many of the product should be in the cart
+   * @param {boolean} options
+   *    If this function was triggered from the product card's "Add to Cart" button
+   *
+   * Example for successful response from backend:
+   * HTTP 200 - Updated list of cart items
+   * [
+   *      {
+   *          "productId": "KCRwjF7lN97HnEaY",
+   *          "qty": 3
+   *      },
+   *      {
+   *          "productId": "BW0jAAeDJmlZCF8i",
+   *          "qty": 1
+   *      }
+   * ]
+   *
+   * Example for failed response from backend:
+   * HTTP 404 - On invalid productId
+   * {
+   *      "success": false,
+   *      "message": "Product doesn't exist"
+   * }
+   */
+  const addToCart = async (token, items, products, productId, qty, options = { preventDuplicate: false }) => {
+    // implementation of updating quantity
+    let body = {}
+    if (productId && qty !== undefined) {
+
+      body = {
+        productId: productId,
+        qty: qty
+      }
+
+    } else {
+
+      if (isItemInCart(cart, productId)) {
+        enqueueSnackbar('Item already in cart. Use the cart sidebar to update quantity or remove item.', { variant: 'warning' })
+      }
+      body = {
+        productId: productId,
+        qty: 1
+      }
+
+    }
+    const response = await axios.post(`${config.endpoint}/cart`, body, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    }).catch((e) => {
+      if (e.response && e.response.status === 400) {
+        enqueueSnackbar(e.response.data.message, { variant: "error" });
+      } else {
+        enqueueSnackbar(
+          "Could not fetch cart details. Check that the backend is running, reachable and returns valid JSON.",
+          {
+            variant: "error",
+          }
+        );
+      }
+    })
+
+    if (response && response.status === 200) {
+      setCart(response.data)
+    }
+
+
+
+
+
+  };
+
+
   // TODO: CRIO_TASK_MODULE_PRODUCTS - Optimise API calls with debounce search implementation
   /**
    * Definition for debounce handler
@@ -173,7 +320,7 @@ const Products = () => {
         />
       </Box>
       <Grid container>
-        <Grid item className="product-grid">
+        <Grid item className="product-grid" md={localStorage.getItem('username') ? 8 : 12}>
           <Box className="hero">
             <p className="hero-heading">
               India’s <span className="hero-highlight">FASTEST DELIVERY</span>{" "}
@@ -200,13 +347,18 @@ const Products = () => {
                 {
                   products.map((item, index) => {
                     return <Grid item xs={6} md={3} key={index}>
-                      <ProductCard product={item} />
+                      <ProductCard product={item} handleAddToCart={addToCart} />
                     </Grid>
                   })
                 }
               </Grid>}
           </Box>
         </Grid>
+        {
+          localStorage.getItem('username') && <Grid item md={4} style={{ backgroundColor: "#E9F5E1" }}>
+            <Cart products={products} items={generateCartItemsFrom(cart, products)} handleQuantity={addToCart} />
+          </Grid>
+        }
       </Grid>
       <Footer />
     </div>

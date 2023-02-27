@@ -32,7 +32,10 @@ const ProductCard = ({ product, handleAddToCart }) => {
           value={product.rating}
           readOnly
         />
-        <Button variant="contained" className="card-button" color="success">
+        <Button variant="contained" className="card-button" color="success" onClick=
+          {() => {
+            handleAddToCart(localStorage.getItem('token'), undefined, undefined, product._id)
+          }}>
           <AddShoppingCartOutlined /> &nbsp; ADD TO CART
         </Button>
       </CardContent>

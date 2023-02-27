@@ -48,6 +48,15 @@ import "./Cart.css";
  *
  */
 export const generateCartItemsFrom = (cartData, productsData) => {
+  let cartItems = []
+  cartData.forEach((item) => {
+    const product = productsData.find(product => product._id === item.productId)
+    if (product) {
+      product['qty'] = item.qty
+      cartItems.push(product)
+    }
+  })
+  return cartItems
 };
 
 /**
@@ -61,6 +70,15 @@ export const generateCartItemsFrom = (cartData, productsData) => {
  *
  */
 export const getTotalCartValue = (items = []) => {
+
+  let total = 0
+
+  items.forEach((item) => {
+    total += parseInt(item.qty) * parseInt(item.cost)
+  })
+
+  return total
+
 };
 
 
@@ -83,6 +101,9 @@ const ItemQuantity = ({
   handleAdd,
   handleDelete,
 }) => {
+
+
+
   return (
     <Stack direction="row" alignItems="center">
       <IconButton size="small" color="primary" onClick={handleDelete}>
@@ -118,6 +139,8 @@ const Cart = ({
   handleQuantity,
 }) => {
 
+  const history = useHistory()
+
   if (!items.length) {
     return (
       <Box className="cart empty">
@@ -132,7 +155,50 @@ const Cart = ({
   return (
     <>
       <Box className="cart">
-        {/* TODO: CRIO_TASK_MODULE_CART - Display view for each cart item with non-zero quantity */}
+        {
+          items.map((item, index) => {
+            return (
+              <Box display="flex" alignItems="flex-start" padding="1rem" key={index}>
+                <Box className="image-container">
+                  <img
+                    // Add product image
+                    src={item.image}
+                    // Add product name as alt eext
+                    alt={item.name}
+                    width="100%"
+                    height="100%"
+                  />
+                </Box>
+                <Box
+                  display="flex"
+                  flexDirection="column"
+                  justifyContent="space-between"
+                  height="6rem"
+                  paddingX="1rem"
+                >
+                  <div>{item.name}</div>
+                  <Box
+                    display="flex"
+                    justifyContent="space-between"
+                    alignItems="center"
+                  >
+                    <ItemQuantity
+                      value={item.qty}
+                      handleDelete={() => {
+                        handleQuantity(localStorage.getItem('token'), items, products, item._id, item.qty - 1)
+                      }}
+                      handleAdd={() => {
+                        handleQuantity(localStorage.getItem('token'), items, products, item._id, item.qty + 1)
+                      }}
+                    />
+                    <Box padding="0.5rem" fontWeight="700">
+                      ${item.cost}
+                    </Box>
+                  </Box>
+                </Box>
+              </Box>)
+          })
+        }
         <Box
           padding="1rem"
           display="flex"
@@ -159,6 +225,9 @@ const Cart = ({
             variant="contained"
             startIcon={<ShoppingCart />}
             className="checkout-btn"
+            onClick={() => {
+              history.push("/checkout")
+            }}
           >
             Checkout
           </Button>

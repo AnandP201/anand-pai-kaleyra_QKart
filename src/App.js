@@ -1,6 +1,7 @@
 import Register from "./components/Register";
 import Login from "./components/Login"
 import Products from './components/Products'
+import Checkout from './components/Checkout'
 import { Switch, Route, BrowserRouter as Router } from "react-router-dom";
 
 export const config = {
