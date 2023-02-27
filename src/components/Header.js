@@ -3,19 +3,11 @@ import OutlinedInput from "@mui/material/OutlinedInput";
 import InputAdornment from "@mui/material/InputAdornment";
 import Search from '@mui/icons-material/Search';
 import { Avatar, Button, Stack } from "@mui/material";
-import Box from "@mui/material/Box";
-import { makeStyles } from "@mui/styles";
+import Box from "@mui/material/Box"
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import "./Header.css";
 
-
-const useStyles = makeStyles(theme => ({
-
-  icon: {
-    color: "#00a278"
-  }
-}))
 
 
 const Header = ({ children, hasHiddenAuthButtons }) => {
@@ -24,7 +16,7 @@ const Header = ({ children, hasHiddenAuthButtons }) => {
 
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [name, setName] = useState(null)
-  const style = useStyles()
+
 
   useEffect(() => {
 
@@ -55,7 +47,7 @@ const Header = ({ children, hasHiddenAuthButtons }) => {
             size="small"
             endAdornment={
               <InputAdornment position="end">
-                <Search className={style.icon} />
+                <Search style={{ color: "#00a278" }} />
               </InputAdornment>
             }
           />

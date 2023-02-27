@@ -8,7 +8,6 @@ import {
   OutlinedInput,
 } from "@mui/material";
 import { Box } from "@mui/system";
-import { makeStyles } from "@mui/styles";
 import axios from "axios";
 import { useSnackbar } from "notistack";
 import React, { useEffect, useState } from "react";
@@ -29,11 +28,7 @@ import "./Products.css";
  * @property {string} image - Contains URL for the product image
  * @property {string} _id - Unique ID for the product
  */
-const useStyles = makeStyles(theme => ({
-  icon: {
-    color: "#00a278"
-  }
-}))
+
 
 const Products = () => {
 
@@ -42,7 +37,7 @@ const Products = () => {
   const [isLoading, setIsLoading] = useState(true)
 
   const { enqueueSnackbar } = useSnackbar()
-  const style = useStyles()
+
 
   useEffect(() => {
 
@@ -172,7 +167,7 @@ const Products = () => {
           size="small"
           endAdornment={
             <InputAdornment position="end">
-              <Search className={style.icon} />
+              <Search style={{ color: "#00a278" }} />
             </InputAdornment>
           }
         />
