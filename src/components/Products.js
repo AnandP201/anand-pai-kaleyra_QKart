@@ -146,17 +146,14 @@ const Products = () => {
         }
       })
 
+
       if (response.status === 200) {
         return response.data
       }
-
-
-
-
-
     } catch (e) {
       if (e.response && e.response.status === 400) {
         enqueueSnackbar(e.response.data.message, { variant: "error" });
+        localStorage.clear()
       } else {
         enqueueSnackbar(
           "Could not fetch cart details. Check that the backend is running, reachable and returns valid JSON.",
@@ -320,7 +317,7 @@ const Products = () => {
         />
       </Box>
       <Grid container>
-        <Grid item className="product-grid" md={localStorage.getItem('username') ? 8 : 12}>
+        <Grid item className="product-grid" md={localStorage.getItem('username') ? 9 : 12}>
           <Box className="hero">
             <p className="hero-heading">
               India’s <span className="hero-highlight">FASTEST DELIVERY</span>{" "}
@@ -355,7 +352,7 @@ const Products = () => {
           </Box>
         </Grid>
         {
-          localStorage.getItem('username') && <Grid item md={4} style={{ backgroundColor: "#E9F5E1" }}>
+          localStorage.getItem('username') && <Grid item md={3} style={{ backgroundColor: "#E9F5E1" }}>
             <Cart products={products} items={generateCartItemsFrom(cart, products)} handleQuantity={addToCart} />
           </Grid>
         }

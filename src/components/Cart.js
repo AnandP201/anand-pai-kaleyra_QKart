@@ -49,13 +49,17 @@ import "./Cart.css";
  */
 export const generateCartItemsFrom = (cartData, productsData) => {
   let cartItems = []
-  cartData.forEach((item) => {
-    const product = productsData.find(product => product._id === item.productId)
-    if (product) {
-      product['qty'] = item.qty
-      cartItems.push(product)
-    }
-  })
+
+  if (cartData) {
+    cartData.forEach((item) => {
+      const product = productsData.find(product => product._id === item.productId)
+      if (product) {
+        product['qty'] = item.qty
+        cartItems.push(product)
+      }
+    })
+  }
+
   return cartItems
 };
 
@@ -80,6 +84,22 @@ export const getTotalCartValue = (items = []) => {
   return total
 
 };
+
+// TODO: CRIO_TASK_MODULE_CHECKOUT - Implement function to return total cart quantity
+/**
+ * Return the sum of quantities of all products added to the cart
+ *
+ * @param { Array.<CartItem> } items
+ *    Array of objects with complete data on products in cart
+ *
+ * @returns { Number }
+ *    Total quantity of products added to the cart
+ *
+ */
+export const getTotalItems = (items = []) => {
+  return items.length
+};
+
 
 
 /**
@@ -137,6 +157,7 @@ const Cart = ({
   products,
   items = [],
   handleQuantity,
+  isReadOnly
 }) => {
 
   const history = useHistory()
@@ -182,15 +203,23 @@ const Cart = ({
                     justifyContent="space-between"
                     alignItems="center"
                   >
-                    <ItemQuantity
-                      value={item.qty}
-                      handleDelete={() => {
-                        handleQuantity(localStorage.getItem('token'), items, products, item._id, item.qty - 1)
-                      }}
-                      handleAdd={() => {
-                        handleQuantity(localStorage.getItem('token'), items, products, item._id, item.qty + 1)
-                      }}
-                    />
+                    {
+                      isReadOnly ?
+                        (<Box padding="0.5rem" fontWeight="700">
+                          Qty: {item.qty}
+                        </Box>) :
+                        (<ItemQuantity
+                          value={item.qty}
+                          handleDelete={() => {
+                            handleQuantity(localStorage.getItem('token'), items, products, item._id, item.qty - 1)
+                          }}
+                          handleAdd={() => {
+                            handleQuantity(localStorage.getItem('token'), items, products, item._id, item.qty + 1)
+                          }}
+                        />)
+                    }
+
+
                     <Box padding="0.5rem" fontWeight="700">
                       ${item.cost}
                     </Box>
@@ -218,20 +247,22 @@ const Cart = ({
             ${getTotalCartValue(items)}
           </Box>
         </Box>
+        {
+          !isReadOnly && <Box display="flex" justifyContent="flex-end" className="cart-footer">
+            <Button
+              color="primary"
+              variant="contained"
+              startIcon={<ShoppingCart />}
+              className="checkout-btn"
+              onClick={() => {
+                history.push("/checkout")
+              }}
+            >
+              Checkout
+            </Button>
+          </Box>
+        }
 
-        <Box display="flex" justifyContent="flex-end" className="cart-footer">
-          <Button
-            color="primary"
-            variant="contained"
-            startIcon={<ShoppingCart />}
-            className="checkout-btn"
-            onClick={() => {
-              history.push("/checkout")
-            }}
-          >
-            Checkout
-          </Button>
-        </Box>
       </Box>
     </>
   );
