@@ -248,7 +248,6 @@ const Products = () => {
         productId: productId,
         qty: 1
       }
-
     }
     const response = await axios.post(`${config.endpoint}/cart`, body, {
       headers: {
