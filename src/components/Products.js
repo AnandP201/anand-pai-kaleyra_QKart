@@ -225,6 +225,7 @@ const Products = () => {
    */
   const addToCart = async (token, items, products, productId, qty, options = { preventDuplicate: false }) => {
     // implementation of updating quantity
+
     let body = {}
     if (productId && qty !== undefined) {
 
@@ -234,6 +235,11 @@ const Products = () => {
       }
 
     } else {
+
+      if (!token) {
+        enqueueSnackbar('You should be logged use cart feature', { variant: 'warning' })
+        return;
+      }
 
       if (isItemInCart(cart, productId)) {
         enqueueSnackbar('Item already in cart. Use the cart sidebar to update quantity or remove item.', { variant: 'warning' })

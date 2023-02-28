@@ -6,7 +6,7 @@ import { Switch, Route, BrowserRouter as Router } from "react-router-dom";
 import Thanks from "./components/Thanks";
 
 export const config = {
-  endpoint: `http://localhost:8082/api/v1`,
+  endpoint: `https://ap-qkart.onrender.com/api/v1`,
 };
 
 function App() {
